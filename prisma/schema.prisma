@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+// ==================================
+// Enums
+// ==================================
+
+enum BIYCLEAVAILABILTY {
+  Taken 
+  Available
+}
+
+model Client {
+
+id            Int       @id @default(autoincrement())
+first_name    String    @db.VarChar(255)
+last_name     String    @db.VarChar(255)
+role_id       Int       @db.VarChar(255)
+nation_id     Int       @unique
+id_picture    String    @db.VarChar(255)
+address       String    @db.VarChar(255)
+Phone number  Int       @unique
+Email         String    @db.VarChar(255)
+Created at    DateTime  @default(now())
+Updated at    DateTime  @updatedAt
+
+
+roleId        Role   @relation(fields:[role_id], references:[id])
+  
+}
+
+model Client_Nation_Id_Picture {
+  id                  Int    @id  @default(autoincrement())
+  client_id           Int @unique
+  id_picture          String  @db.VarChar(255)
+  Created at          DateTime  @default(now())
+  Updated at          DateTime  @updatedAt
+
+  clientDtailsId  Client   @relation(fields:[client_id], references:[id])
+
+}
+
+model Role {
+  id              Int        @id @default(autoincrement())
+  name            String     @db.VarChar(255)
+  description     String     @db.VarChar(255)
+  Created at      DateTime   @default(now())
+  Updated at      DateTime   @updatedAt
+
+}
+
+model Permision {
+  id             Int @id    @default(autoincrement())
+  Permision      String     @db.VarChar(255)
+  description    String     @db.VarChar(255)
+  Created at     DateTime   @default(now())
+  Updated at     DateTime   @updatedAt
+}
+
+model rolePermission {
+  id             Int   @id  @default(autoincrement())
+  role_id        Int   
+  permission_id  Int   
+  Created at     DateTime   @default(now())
+  Updated at     DateTime   @updatedAt
+}
+
+
+model  Biycle{
+
+id               Int  @id  @default(autoincrement())                
+name             String    @unique  @db.VarChar(255)
+Model            String    @db.VarChar(255)
+Brand            String    @db.VarChar(255)
+Availability     BIYCLEAVAILABILTY    @default(Available)
+Created at       DateTime  @default(now())
+Updated at       DateTime  @updatedAt
+
+}
+
+
+model Time {
+
+id               Int       @id @default(autoincrement())
+time_interval    String    @db.VarChar(255)
+amount           Int 
+Created at       DateTime  @default(now())
+Updated at       DateTime  @updatedAt
+
+}
+
+model Biycle_assign {
+
+Id                  Int 
+bicycleID           Int
+userid              Int
+time_intervalid     Int
+additional_amount   Int
+startTime           DateTime  @default(now())
+ENDTime             DateTime
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -7,13 +7,26 @@
  * @created 2025-03-3
  */
 
-// import getEnv from "../../utils/envs";
-// import {CorsOptions} from "cors";
 
-// const originEnvs = getEnv("ALLOWED_ORIGINS");
-// const originAllowed = originEnvs ? originEnvs.split(','):[];
+import { CorsOptions } from 'cors';
+import getEnv from '../../utils/envs';
 
-// export const corsoptions: CorsOptions = {
-//     origin:
+const allowedOriginsEnv = getEnv('ALLOWED_ORIGINS')
+const allowedOrigins = allowedOriginsEnv
+  ? allowedOriginsEnv.split(',')
+  : [];
+console.log(allowedOrigins);
 
-// }
+export const corsOptions: CorsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+console.log(corsOptions);

@@ -2,14 +2,21 @@
   "name": "NBMS_BN",
   "packageManager": "yarn@4.4.1",
   "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "morgan": "^1.10.0",
+    "prisma": "^6.4.1",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1",
     "@types/cors": "^2",
     "@types/express": "^5.0.0",
     "@types/mongoose": "^5.11.97",
+    "@types/morgan": "^1",
     "@types/node": "^22.13.8",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
