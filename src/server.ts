@@ -10,7 +10,7 @@
 import { configApp } from "./appConfigure";
 import { PORT } from "./contants";
 import {Server} from "socket.io";
-import { configureSocket } from './socket';
+import {configureSocket}  from "./socket";
 import app from "./app";
 
 const server = app.listen(PORT,() =>{
