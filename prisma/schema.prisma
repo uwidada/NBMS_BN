@@ -13,116 +13,94 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-// ==================================
-// Enums
-// ==================================
-
-enum BIYCLEAVAILABILTY {
-  Taken 
-  Available
-}
-
 model Client {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  firstName   String
+  lastName    String
+  roleId      String
+  nationId    String
+  idPicture   String
+  address     String
+  phoneNumber String
+  email       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-id            Int       @id @default(autoincrement())
-first_name    String    @db.VarChar(255)
-last_name     String    @db.VarChar(255)
-role_id       Int       @db.VarChar(255)
-nation_id     Int       @unique
-id_picture    String    @db.VarChar(255)
-address       String    @db.VarChar(255)
-Phone number  Int       @unique
-Email         String    @db.VarChar(255)
-Created at    DateTime  @default(now())
-Updated at    DateTime  @updatedAt
-
-
-roleId        Role   @relation(fields:[role_id], references:[id])
-  
+  role                  Role                    @relation(fields: [roleId], references: [id])
+  ClientNationIdPicture ClientNationIdPicture[]
+  BicycleAssign         BicycleAssign[]
 }
 
-model Client_Nation_Id_Picture {
-  id                  Int    @id  @default(autoincrement())
-  client_id           Int @unique
-  id_picture          String  @db.VarChar(255)
-  Created at          DateTime  @default(now())
-  Updated at          DateTime  @updatedAt
+model ClientNationIdPicture {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  clientId  String
+  idPicture String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  clientDtailsId  Client   @relation(fields:[client_id], references:[id])
-
+  client Client @relation(fields: [clientId], references: [id])
 }
 
 model Role {
-  id              Int        @id @default(autoincrement())
-  name            String     @db.VarChar(255)
-  description     String     @db.VarChar(255)
-  Created at      DateTime   @default(now())
-  Updated at      DateTime   @updatedAt
-
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  description    String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Client         Client[]
+  RolePermission RolePermission[]
 }
 
-model Permision {
-  id             Int @id    @default(autoincrement())
-  Permision      String     @db.VarChar(255)
-  description    String     @db.VarChar(255)
-  Created at     DateTime   @default(now())
-  Updated at     DateTime   @updatedAt
+model Permission {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  description    String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  RolePermission RolePermission[]
 }
 
-model rolePermission {
-  id             Int   @id  @default(autoincrement())
-  role_id        Int   
-  permission_id  Int   
-  Created at     DateTime   @default(now())
-  Updated at     DateTime   @updatedAt
+model RolePermission {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  roleId       String
+  permissionId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
 }
 
-
-model  Biycle{
-
-id               Int  @id  @default(autoincrement())                
-name             String    @unique  @db.VarChar(255)
-Model            String    @db.VarChar(255)
-Brand            String    @db.VarChar(255)
-Availability     BIYCLEAVAILABILTY    @default(Available)
-Created at       DateTime  @default(now())
-Updated at       DateTime  @updatedAt
-
+model Bicycle {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  name          String          @unique
+  model         String
+  brand         String
+  availability  String          @default("Available") // Enum replaced with a string
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  BicycleAssign BicycleAssign[]
 }
-
 
 model Time {
-
-id               Int       @id @default(autoincrement())
-time_interval    String    @db.VarChar(255)
-amount           Int 
-Created at       DateTime  @default(now())
-Updated at       DateTime  @updatedAt
-
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  timeInterval  String
+  amount        Int
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  BicycleAssign BicycleAssign[]
 }
 
-model Biycle_assign {
+model BicycleAssign {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  bicycleId        String
+  userId           String
+  timeIntervalId   String
+  additionalAmount Int
+  startTime        DateTime @default(now())
+  endTime          DateTime
 
-Id                  Int 
-bicycleID           Int
-userid              Int
-time_intervalid     Int
-additional_amount   Int
-startTime           DateTime  @default(now())
-ENDTime             DateTime
-
-
+  bicycle      Bicycle @relation(fields: [bicycleId], references: [id])
+  user         Client  @relation(fields: [userId], references: [id])
+  timeInterval Time    @relation(fields: [timeIntervalId], references: [id])
 }
-
-
-
-
-
-
-
-
-
-
-
-

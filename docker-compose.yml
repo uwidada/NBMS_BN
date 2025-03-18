@@ -1,0 +1,43 @@
+name: NBMS_BN
+services:
+  db_mongo:
+    image: mongo:6.0
+    restart: always
+    container_name: mongo_db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_ROOT_DATABASE}
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "${MONGO_ROOT_PORT}:27017"
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: NBMS_BN_local-mailhog
+    restart: always
+    ports:
+      - "${MAIL_LOG_SMTP_PORT}:${MAIL_LOG_SMTP_PORT}" # SMTP server
+      - "${MAIL_LOG_WEB_UI_PORT}:${MAIL_LOG_WEB_UI_PORT}" # Web UI
+    volumes:
+      - mailhog_data:/data
+
+  redis:
+    image: redis:7.0
+    container_name: NBMS_BN_redis_service
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+
+volumes:
+  mongo-data:
+  mailhog_data:
+  redis_data:
