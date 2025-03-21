@@ -7,16 +7,6 @@
  * @created 2025-03-14
  */
 
-
-/**
- * Configuration for the socket
- *
- * @module socket.configuration
- * @version 1.0.0
- * @author Bryan Murasira
- * @created 2024-12-02
- */
-
 import { Server as SocketIOServer, Socket } from 'socket.io';
 // import logger from '../config/logger';
 // import prisma from '../config/prismaClient'
