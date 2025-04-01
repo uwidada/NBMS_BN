@@ -26,6 +26,7 @@ import { configApp } from './appConfigure';
 // Utils
 // import { NotFoundError } from './utils';
 import path from 'path';
+import bicycleRoutes from './route';
 
 const app = configApp(express());
 
@@ -50,6 +51,8 @@ app.all('*', (req, res, next) => {
 console.log("page requested notFound");
 //   next(err);
 });
+app.use(express.json()); // Middleware to parse JSON requests
+app.use("/bicycles", bicycleRoutes);
 
 // Error handling
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

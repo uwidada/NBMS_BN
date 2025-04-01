@@ -8,16 +8,16 @@
  */
 
 import prisma from "../config/prismaConfig";
- import  {bicycle} from "../types/bicycle"
+import  {bicycle} from "../types/bicycle"
     
 
 //a sevrice to add a new bicyle
 
-export const createBicycle = async (                            
+const createBicycle = async (                            
     name: string,             
     Model :string,           
     Brand :string           
-) =>{
+):Promise<any> =>{
     try {
         const newBicycle = await prisma.bicycle.create({
            data:{
@@ -30,7 +30,6 @@ export const createBicycle = async (
         if (!newBicycle){
             return null;
         }
-
         return newBicycle;
         
     } catch (error) {
@@ -41,7 +40,7 @@ export const createBicycle = async (
 
 // service to get all bicycle created
 
-export const getAllBicycle = async()=>{
+ const getAllBicycle = async()=>{
     try {
         const allBicycle = await prisma.bicycle.findMany({});
 
@@ -58,7 +57,7 @@ export const getAllBicycle = async()=>{
 
 // service to get one biclce by id 
 
-export const getOneBiclcye = async(
+ const getOneBiclcye = async(
     bicycleId:string,
 ):Promise<any> =>{
     try {
@@ -78,7 +77,7 @@ export const getOneBiclcye = async(
 
 // a service to get a bicycle by name 
 
-export const getBiclceByName = async(
+ const getBiclceByName = async(
     biclcyeName:string,
 ):Promise<any> =>{
     try {
@@ -98,7 +97,7 @@ export const getBiclceByName = async(
 
 // a service to update a biclye
 
-export const updateBicycle = async (
+ const updateBicycle = async (
     bicycleId: string,
     name: string,             
     model: string,           
@@ -123,3 +122,11 @@ export const updateBicycle = async (
         return null;
     }
 };
+
+export const biclcyeCrudService = {
+    createBicycle,
+    getAllBicycle,
+    getOneBiclcye,
+    getBiclceByName,
+    updateBicycle
+}
